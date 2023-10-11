@@ -5,11 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BreakfastMenuComponent } from './breakfast-menu/breakfast-menu.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ForexMenuComponent } from './forex-menu/forex-menu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BreakfastMenuComponent
+    BreakfastMenuComponent,
+    ForexMenuComponent
   ],
   imports: [
     BrowserModule,

@@ -34,4 +34,14 @@ export class MenuService {
       })
     )
   }
+
+  updateForex(): Observable<any>{
+    const src = interval(3000)
+    return src.pipe(
+      map((x)=>{
+        const rate = Math.floor((Math.random() * 1 +1) * 100) / 100
+        return rate
+      })
+    )
+  }
 }
