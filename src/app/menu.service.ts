@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, map, interval} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,16 @@ export class MenuService {
   getMenuItems(): Observable<any[]>{
     return of(
       this.menuItems
+    )
+  }
+
+  updateTax(): Observable<any>{
+    const src = interval(10000)
+    return src.pipe(
+      map((x)=>{
+        const rate = Math.floor(Math.random() * 10) + 6;
+        return rate
+      })
     )
   }
 }
