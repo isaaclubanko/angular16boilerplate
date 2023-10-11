@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, WritableSignal, signal, computed } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { MenuService } from '../menu.service';
 import { Subscription } from 'rxjs';
@@ -12,10 +12,19 @@ import { Subscription } from 'rxjs';
 export class BreakfastMenuComponent implements OnInit{
 
   items:any[] = []
-  grossTotal: number = 0.00
-  taxRate: number = 9
-  totalPrice: number = 0.00
   taxSubscription$: Subscription = new Subscription();
+
+  
+  grossTotal: WritableSignal<number> = signal(0);
+  taxRate: WritableSignal<number> = signal(9);
+
+  tax = computed(()=>(
+    this.grossTotal() * this.taxRate()) / 100
+  )
+  totalPrice = computed(()=>
+    Math.round((this.grossTotal() + this.tax()) * 100) / 100
+  )
+
 
   constructor(
     private menuService: MenuService
@@ -29,15 +38,13 @@ export class BreakfastMenuComponent implements OnInit{
     })
     this.taxSubscription$ = this.menuService.updateTax().subscribe(
       rate=>{
-        this.taxRate = rate;
+        this.taxRate.set(rate);
       }
     )
   }
 
   public updateTotal(item: any){
-    this.grossTotal = this.grossTotal + item.price
-    let tax = (this.grossTotal * this.taxRate) / 100
-    this.totalPrice = Math.round((this.grossTotal + tax) * 100) / 100
+    this.grossTotal.update(value => value + item.price)
   }
 
   public ngOnDestroy(){

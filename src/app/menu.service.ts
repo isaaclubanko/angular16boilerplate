@@ -26,7 +26,7 @@ export class MenuService {
   }
 
   updateTax(): Observable<any>{
-    const src = interval(10000)
+    const src = interval(3000)
     return src.pipe(
       map((x)=>{
         const rate = Math.floor(Math.random() * 10) + 6;
