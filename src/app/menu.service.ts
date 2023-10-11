@@ -39,7 +39,7 @@ export class MenuService {
     const src = interval(3000)
     return src.pipe(
       map((x)=>{
-        const rate = Math.floor((Math.random() * 1 +1) * 100) / 100
+        const rate = Math.floor((Math.random() * .3 + 1) * 100) / 100
         return rate
       })
     )
