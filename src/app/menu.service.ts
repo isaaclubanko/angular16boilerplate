@@ -25,7 +25,7 @@ export class MenuService {
     )
   }
 
-  updateTax(): Observable<any>{
+  updateTax(): Observable<number>{
     const src = interval(3000)
     return src.pipe(
       map((x)=>{
