@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { MenuService } from '../menu.service';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatestWith, Observable, Subscription, map, tap} from 'rxjs';
+
 
 
 @Component({
@@ -10,13 +11,13 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./forex-menu.component.css']
 })
 export class ForexMenuComponent implements OnInit {
-  items:any[] = []
   orders:any[] = []
-  grossTotal: number = 0.00
-  forexRate: number = 1
-  totalPrice: number = 0.00
-  forexSubscription$: Subscription = new Subscription();
+  grossTotal$: BehaviorSubject<number> = new BehaviorSubject(0)
+  forexRate$: BehaviorSubject<number> = new BehaviorSubject(1)
 
+  items$: Observable<any> = new Observable()
+  forexSubscription$: Subscription = new Subscription();
+  totalPrice = 0;
   constructor(
     private menuService: MenuService
   ){
@@ -24,68 +25,30 @@ export class ForexMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.menuService.getMenuItems().subscribe( items=>{
-      this.items = items;
-    })
+    this.items$ = this.menuService.getMenuItems()
     this.forexSubscription$ = this.menuService.updateForex().subscribe(
       rate=>{
-        this.forexRate = rate;
+        this.forexRate$.next(rate);
       }
     )
+    this.grossTotal$.pipe(
+      combineLatestWith(this.forexRate$)
+    ).subscribe(([gross, forex])=>{
+      this.totalPrice = this.roundTotal(gross, forex);
+    })
   }
 
+
+  public roundTotal(v1:number, v2:number){
+    return Math.round((v1 * v2) * 100) / 100
+  }
   public updateTotal(item: any){
     this.orders.push(item)
-    this.grossTotal = this.grossTotal + item.price
-    // let forex = (this.grossTotal * this.forexRate) / 100
-    this.totalPrice = Math.round((this.grossTotal + this.forexRate) * 100) / 100
+    let total = this.grossTotal$.value + item.price
+    this.grossTotal$.next(total)
   }
 
   public ngOnDestroy(){
     this.forexSubscription$.unsubscribe()
   }
 }
-
-
-
-
-// @Component({
-//   selector: 'app-breakfast-menu',
-//   templateUrl: './breakfast-menu.component.html',
-//   styleUrls: ['./breakfast-menu.component.css']
-// })
-// export class BreakfastMenuComponent implements OnInit{
-
-//   items:any[] = []
-//   grossTotal: number = 0.00
-//   taxRate: number = 9
-//   totalPrice: number = 0.00
-//   taxSubscription$: Subscription = new Subscription();
-
-//   constructor(
-//     private menuService: MenuService
-//   ){
-    
-//   }
-
-//   ngOnInit(): void {
-//     this.menuService.getMenuItems().subscribe( items=>{
-//       this.items = items;
-//     })
-//     this.taxSubscription$ = this.menuService.updateTax().subscribe(
-//       rate=>{
-//         this.taxRate = rate;
-//       }
-//     )
-//   }
-
-//   public updateTotal(item: any){
-//     this.grossTotal = this.grossTotal + item.price
-//     let tax = (this.grossTotal * this.taxRate) / 100
-//     this.totalPrice = Math.round((this.grossTotal + tax) * 100) / 100
-//   }
-
-//   public ngOnDestroy(){
-//     this.taxSubscription$.unsubscribe()
-//   }
-// }

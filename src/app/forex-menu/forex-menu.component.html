@@ -1,7 +1,7 @@
 <br>
 <div class="container-md">
   <div class="row">
-    <div *ngFor="let item of items"class="col-sm-6">
+    <div *ngFor="let item of items$ | async" class="col-sm-6">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">{{ item.name }} - {{ item.price }} EUR</h5>
@@ -28,8 +28,8 @@
   </table>
 
   <hr/>
-  <h3>Subtotal: {{ grossTotal }} EUR</h3>
+  <h3>Subtotal: {{ grossTotal$ | async }} EUR</h3>
   <h3>Total Price ${{ totalPrice }} USD</h3>
-  <h3>Forex Rate: ${{ forexRate }}</h3>
+  <h3>Forex Rate: ${{ forexRate$ | async }}</h3>
 </div>
 
