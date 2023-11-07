@@ -14,10 +14,10 @@ export class ForexMenuComponent implements OnInit {
   orders:any[] = []
   grossTotal$: BehaviorSubject<number> = new BehaviorSubject(0)
   forexRate$: BehaviorSubject<number> = new BehaviorSubject(1)
+  totalPrice$: BehaviorSubject<number> = new BehaviorSubject(0)
 
   items$: Observable<any> = new Observable()
   forexSubscription$: Subscription = new Subscription();
-  totalPrice = 0;
   constructor(
     private menuService: MenuService
   ){
@@ -32,19 +32,21 @@ export class ForexMenuComponent implements OnInit {
       }
     )
     this.grossTotal$.pipe(
-      combineLatestWith(this.forexRate$)
-    ).subscribe(([gross, forex])=>{
-      this.totalPrice = this.roundTotal(gross, forex);
-    })
+      combineLatestWith(this.forexRate$),
+      tap(([gross, forex])=>{
+        this.totalPrice$.next(this.dollarAmount(gross * forex))
+      })
+    ).subscribe()
   }
 
 
-  public roundTotal(v1:number, v2:number){
-    return Math.round((v1 * v2) * 100) / 100
+  public dollarAmount(v1:number){
+    return Math.round((v1) * 100) / 100
   }
+
   public updateTotal(item: any){
     this.orders.push(item)
-    let total = this.grossTotal$.value + item.price
+    let total = this.dollarAmount(this.grossTotal$.value + item.price)
     this.grossTotal$.next(total)
   }
 
