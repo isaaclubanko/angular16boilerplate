@@ -52,8 +52,5 @@ export class ForexMenuComponent implements OnInit {
 
   public ngOnDestroy(){
     this.forexSubscription$.unsubscribe()
-    this.grossTotal$.unsubscribe();
-    this.totalPrice$.unsubscribe();
-    this.forexRate$.unsubscribe();
   }
 }
