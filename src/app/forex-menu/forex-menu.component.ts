@@ -16,8 +16,8 @@ export class ForexMenuComponent implements OnInit {
 
   grossTotal: WritableSignal<number> = signal(0);
   forexRate: WritableSignal<number> = signal(1);
-  totalPrice =  computed(() => 
-    Math.round(this.grossTotal() * this.forexRate() * 100) / 100
+  totalPrice = computed(() => 
+    this.dollarAmount(this.grossTotal() * this.forexRate())
   )
 
   constructor(
@@ -37,9 +37,13 @@ export class ForexMenuComponent implements OnInit {
     )
   }
 
+  public dollarAmount(v1:number){
+    return Math.round((v1) * 100) / 100
+  }
+
   public updateTotal(item: any){
     this.orders.push(item)
-    this.grossTotal.update((value)=> value + item.price )
+    this.grossTotal.update((value)=> this.dollarAmount(value + item.price ))
   }
 
   public ngOnDestroy(){
