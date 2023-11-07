@@ -7,14 +7,24 @@ import { Observable, of, map, interval} from 'rxjs';
 export class MenuService {
   menuItems: any[] = [
     {
-      name: 'Sausage McMuffin',
+      name: 'Two Eggs',
       price: 2.19,
-      description: 'a sausage egg mcmuffin so good youll want to get another one'
+      description: 'Two eggs any style'
     },
     {
-      name: 'pancakes',
+      name: 'Pancakes',
       price: 5.19,
-      description: '3 stacks of flapjacks'
+      description: 'Triple stack of flapjacks'
+    },
+    {
+      name: 'Bacon',
+      price: 2.50,
+      description: 'Extra Crispy'
+    },
+    {
+      name: 'Scrapple',
+      price: 2.89,
+      description: 'PA Specialty'
     }
   ]
   constructor() { }
