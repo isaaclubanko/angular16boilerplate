@@ -1,7 +1,7 @@
 <br>
 <div class="container-md">
   <div class="row">
-    <div *ngFor="let item of items"class="col-sm-6">
+    <div *ngFor="let item of items$ | async"class="col-sm-6">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">{{ item.name }} - {{ item.price }} EUR</h5>

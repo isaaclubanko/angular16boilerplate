@@ -1,7 +1,7 @@
-import { Component, WritableSignal, signal, computed } from '@angular/core';
+import { Component, WritableSignal, Signal, signal, computed } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { MenuService } from '../menu.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-forex-menu',
@@ -11,12 +11,12 @@ import { Subscription } from 'rxjs';
 export class ForexMenuComponent implements OnInit {
   forexSubscription$: Subscription = new Subscription();
 
-  items:any[] = []
+  items$: Observable<any> = new Observable()
   orders:any[] = []
 
   grossTotal: WritableSignal<number> = signal(0);
   forexRate: WritableSignal<number> = signal(1);
-  totalPrice = computed(() => 
+  totalPrice: Signal<number> = computed(() => 
     this.dollarAmount(this.grossTotal() * this.forexRate())
   )
 
@@ -27,9 +27,7 @@ export class ForexMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.menuService.getMenuItems().subscribe( items=>{
-      this.items = items;
-    })
+    this.items$ = this.menuService.getMenuItems()
     this.forexSubscription$ = this.menuService.updateForex().subscribe(
       rate=>{
         this.forexRate.set(rate);
