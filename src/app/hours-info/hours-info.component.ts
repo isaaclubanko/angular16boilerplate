@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HoursService } from './hours.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-hours-info',
@@ -11,13 +11,13 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./hours-info.component.css']
 })
 export class HoursInfoComponent implements OnInit{
-  hoursSubscription$: Subscription = new Subscription();
+  hoursSubscription$: Observable<any> = new Observable();
 
   constructor( private hoursService: HoursService){
 
   }
 
   ngOnInit(): void {
-    this.hoursSubscription$ = this.hoursService.getHours().subscribe()
+    this.hoursSubscription$ = this.hoursService.getHours();
   }
 }
