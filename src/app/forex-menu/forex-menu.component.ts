@@ -54,6 +54,6 @@ export class ForexMenuComponent implements OnInit {
     this.forexSubscription$.unsubscribe()
     this.grossTotal$.unsubscribe();
     this.totalPrice$.unsubscribe();
-    this.forexRate$.unsubscribe():
+    this.forexRate$.unsubscribe();
   }
 }
