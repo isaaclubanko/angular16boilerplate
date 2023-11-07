@@ -16,10 +16,7 @@ export class ForexMenuComponent implements OnInit {
 
   grossTotal: WritableSignal<number> = signal(0);
   forexRate: WritableSignal<number> = signal(1);
-  totalPrice: Signal<number> = computed(() => 
-    this.dollarAmount(this.grossTotal() * this.forexRate())
-  )
-
+  totalPrice: Signal<number> = signal(0);
   constructor(
     private menuService: MenuService
   ){
@@ -27,24 +24,27 @@ export class ForexMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.items$ = this.menuService.getMenuItems()
+    this.items$ = this.menuService.getMenuItems();
     this.forexSubscription$ = this.menuService.updateForex().subscribe(
       rate=>{
         this.forexRate.set(rate);
       }
-    )
+    );
+    this.totalPrice = computed(() => 
+      this.dollarAmount(this.grossTotal() * this.forexRate())
+    );
   }
 
-  public dollarAmount(v1:number){
-    return Math.round((v1) * 100) / 100
+  private dollarAmount(v1:number){
+    return Math.round((v1) * 100) / 100;
   }
 
   public updateTotal(item: any){
-    this.orders.push(item)
-    this.grossTotal.update((value)=> this.dollarAmount(value + item.price ))
+    this.orders.push(item);
+    this.grossTotal.update((value) => this.dollarAmount(value + item.price));
   }
 
   public ngOnDestroy(){
-    this.forexSubscription$.unsubscribe()
+    this.forexSubscription$.unsubscribe();
   }
 }
