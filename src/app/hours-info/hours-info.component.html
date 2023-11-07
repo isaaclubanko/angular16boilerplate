@@ -1,0 +1,22 @@
+<br>
+<br>
+<div class="containser xs">
+    <div class="row">
+        <div class="col-sm-4">
+            <table class="table table-striped">
+                <tbody>
+                  <tr *ngFor="let day of hoursSubscription$ | async">
+                    <th scope="row">{{ day.day }}</th>
+                    <td>{{ day.time }}</td>
+    
+                  </tr>
+                </tbody>
+              </table>
+        
+        </div>
+        <div class = "col-sm-6">
+            <img src="assets/diner.jpg" class="img-fluid" alt="Responsive image">
+        </div>
+    </div>
+
+</div>
